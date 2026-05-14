@@ -1,0 +1,19 @@
+base_url = "https://qterminator.org"
+title = "QTerminator"
+description = "A Qt port of the Terminator terminal emulator, built with PyQt6 and QTermWidget."
+default_language = "en"
+compile_sass = true
+generate_feeds = true
+feed_filenames = ["atom.xml"]
+build_search_index = false
+
+taxonomies = [
+  { name = "tags", feed = true },
+]
+
+[markdown]
+smart_punctuation = true
+
+[extra]
+repo_url = "https://codeberg.org/qterminator/qterminator"
+author = "qterminator"
