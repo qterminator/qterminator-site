@@ -1,22 +1,208 @@
 {% extends "base.html" %}
 
-{% block content %}
-<article class="page home">
-  {{ section.content | safe }}
+{% block description %}QTerminator is a Qt-native port of Terminator: recursive split-and-tile terminals, tabs, groups and broadcast input, a deep plugin ecosystem, remote tmux sharing, and a control surface that lets AI agents drive your terminal over a socket or MCP.{% endblock %}
 
-  {% set blog = get_section(path="blog/_index.md") %}
-  {% if blog.pages %}
-  <section class="recent">
-    <h2>Recent posts</h2>
-    <ul class="post-list">
-      {% for post in blog.pages | slice(end=5) %}
+{% block content %}
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">PyQt6 · QTermWidget · plugin-driven</p>
+    <h1>Tile your terminal. Then automate it.</h1>
+    <p class="lede">
+      QTerminator brings the beloved split-and-tile workflow of Terminator to a fast,
+      Qt-native terminal. Arrange panes however you think — recursive splits, tabs,
+      groups, broadcast input — then extend it with dozens of built-in plugins. It
+      even speaks to AI coding agents over a local socket and MCP.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#install">Get QTerminator</a>
+      <a class="btn btn-ghost" href="{{ config.extra.repo_url }}">Read the source</a>
+    </div>
+    <p class="hero-note">A Qt port of Terminator · ~40 built-in plugins · ~1,400 tests · GPL-3.0 · 6 languages</p>
+  </div>
+</section>
+
+<section class="pillars wrap">
+  <div class="card">
+    <div class="card-icon" aria-hidden="true">▦</div>
+    <h3>Split &amp; tile</h3>
+    <p>
+      Recursive horizontal and vertical splits with nesting, a full tab bar, named
+      groups, and broadcast input — type once and reach every pane in a group at once.
+    </p>
+  </div>
+  <div class="card">
+    <div class="card-icon" aria-hidden="true">🧩</div>
+    <h3>A plugin for everything</h3>
+    <p>
+      Around forty built-in plugins — recording, telemetry, triggers, snippets,
+      instant replay, smart clipboard and more — plus clean hooks for dropping in
+      your own.
+    </p>
+  </div>
+  <div class="card">
+    <div class="card-icon" aria-hidden="true">🤖</div>
+    <h3>Built for AI agents</h3>
+    <p>
+      A local agent-control socket and an MCP server let tools like Claude Code
+      introspect tabs, inject input, and read the rendered screen — same-user-only by
+      design.
+    </p>
+  </div>
+</section>
+
+<section id="features" class="band">
+  <div class="wrap feature">
+    <div class="feature-tag">Arrange it your way</div>
+    <h2>The layout in your head, on your screen</h2>
+    <p class="section-lede">
+      Terminator's tiling philosophy, rebuilt on a modern Qt stack — with the
+      conveniences power users keep asking for.
+    </p>
+    <ul class="ladder">
       <li>
-        <time datetime="{{ post.date }}">{{ post.date | date(format='%Y-%m-%d') }}</time>
-        <a href="{{ post.permalink }}">{{ post.title }}</a>
+        <span class="ladder-step">Tile</span>
+        <div>
+          <strong>Splits, tabs &amp; groups</strong>
+          <p>Recursive horizontal/vertical splits, a tab bar with rename/reorder/close, named terminal groups, broadcast-to-group or broadcast-to-all input, and a read-only lock to prevent stray keystrokes.</p>
+        </div>
       </li>
-      {% endfor %}
+      <li>
+        <span class="ladder-step">Theme</span>
+        <div>
+          <strong>Profiles &amp; live theming</strong>
+          <p>Named profiles (font, color scheme from 13 built-ins, cursor, scrollback) you switch and cycle per terminal — and <code>auto_profile</code> can turn a prod host red automatically.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ladder-step">Bind</span>
+        <div>
+          <strong>50+ rebindable shortcuts</strong>
+          <p>Every common operation has a keyboard shortcut, all rebindable from a searchable, category-grouped Preferences dialog.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ladder-step">Persist</span>
+        <div>
+          <strong>Layouts &amp; sessions that survive restarts</strong>
+          <p>Splits and tabs are saved as TOML and restored on launch; optional tmux-backed sessions keep your running processes alive across restarts entirely.</p>
+        </div>
+      </li>
     </ul>
-  </section>
-  {% endif %}
-</article>
+  </div>
+</section>
+
+<section class="wrap split">
+  <div class="split-text">
+    <h2>Drive it with AI</h2>
+    <p>
+      QTerminator exposes a local Unix-socket JSON-RPC surface — and a matching
+      <code>qterminator-mcp</code> server — so an agent can list tabs, inject input,
+      tail the PTY, and snapshot the rendered screen. An event channel pushes
+      command-finished, trigger-match, and cwd-changed events instead of polling.
+    </p>
+    <p class="muted">
+      Access is same-UID-only, and shell integration parses OSC&nbsp;133/7/8 (the same
+      sequences kitty, iTerm2 and starship use) into structured per-command history.
+    </p>
+  </div>
+  <div class="split-text">
+    <h2>Share your session</h2>
+    <p>
+      Hand off a live tmux-backed terminal three ways: over <strong>mosh</strong>,
+      through a local <strong>SSH</strong> server, or straight to a
+      <strong>browser</strong> over WebSocket.
+    </p>
+    <p>
+      The browser bind is secured with Ed25519 challenge-response auth and
+      timing-safe verification — read-only or read-write, your call — and stays
+      loopback-bound by default.
+    </p>
+  </div>
+</section>
+
+<section id="plugins" class="band">
+  <div class="wrap feature">
+    <div class="feature-tag">~40 built-in plugins</div>
+    <h2>Batteries very much included</h2>
+    <p class="section-lede">
+      Plugins hook into URL handling, context menus, and an output watcher backed by a
+      shared <code>pyte</code> screen — so each one sees a consistent view of the grid
+      at near-zero idle cost. A taste of what ships in the box:
+    </p>
+    <div class="tech-grid">
+      <div><strong>command_telemetry</strong><span>per-command duration, CPU, peak memory</span></div>
+      <div><strong>instant_replay</strong><span>scrub backward through history</span></div>
+      <div><strong>asciinema_record</strong><span>per-tab session recording</span></div>
+      <div><strong>triggers</strong><span>regex → notify / color / run / capture</span></div>
+      <div><strong>snippets</strong><span>named text with placeholder prompts</span></div>
+      <div><strong>smart_clipboard</strong><span>paste-escaping, copy as path/markdown</span></div>
+      <div><strong>badges</strong><span>live click-through metadata overlay</span></div>
+      <div><strong>hotkey_window</strong><span>Quake-style dropdown terminal</span></div>
+      <div><strong>modal</strong><span>vim-like normal/insert keybindings</span></div>
+      <div><strong>tmux_web_share</strong><span>browser access with Ed25519 auth</span></div>
+      <div><strong>workspace_switcher</strong><span>fuzzy-find projects, open in tabs</span></div>
+      <div><strong>undo_close</strong><span>restore a recently closed tab</span></div>
+    </div>
+    <p class="section-lede small">
+      …plus logger, screenshot, PDF/HTML export, print, text transforms, process
+      control, scheduler, notifications, file &amp; output monitors, stacked panes,
+      pattern links, paste history, timestamps, dynamic profiles and more — and your
+      own drop into a config directory.
+    </p>
+  </div>
+</section>
+
+<section class="wrap feature">
+  <div class="feature-tag">Under the hood</div>
+  <h2>Real VT emulation, modern stack</h2>
+  <div class="tech-grid">
+    <div><strong>PyQt6</strong><span>modern Qt6, HiDPI &amp; Wayland</span></div>
+    <div><strong>QTermWidget 6</strong><span>real C++ VT emulation</span></div>
+    <div><strong>Vendored SIP bindings</strong><span>builds from source, one command</span></div>
+    <div><strong>pyte shadow screen</strong><span>shared grid view for plugins</span></div>
+    <div><strong>MCP server</strong><span>one-line agent integration</span></div>
+    <div><strong>~1,400 tests</strong><span>pytest + pytest-qt, headless</span></div>
+  </div>
+  <p class="section-lede small">
+    Packaged for openSUSE, Ubuntu/Debian and Fedora with a desktop file, AppStream
+    metadata, icons and man pages, and translated into Czech, German, French,
+    Japanese, Russian and Simplified Chinese. Requires Python 3.10+, PyQt6 6.5+, and
+    QTermWidget 6.
+  </p>
+</section>
+
+<section id="install" class="band band-accent">
+  <div class="wrap">
+    <h2>Get QTerminator</h2>
+    <p class="section-lede">
+      QTerminator is early (v0.1) but substantial, with a deep feature set and a large
+      automated test suite. The vendored bindings build from source in one step.
+    </p>
+    <pre><code>git clone https://codeberg.org/qterminator/qterminator
+cd qterminator
+# Requires Python 3.10+, PyQt6 6.5+, QTermWidget 6 + Python bindings
+just run</code></pre>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="{{ config.extra.repo_url }}">Source on Codeberg</a>
+      <a class="btn btn-ghost" href="{{ get_url(path='@/blog/_index.md') }}">Read the blog</a>
+    </div>
+  </div>
+</section>
+
+{% set blog = get_section(path="blog/_index.md") %}
+{% if blog.pages %}
+<section class="wrap recent">
+  <h2>From the blog</h2>
+  <ul class="post-list">
+    {% for post in blog.pages | slice(end=4) %}
+    <li>
+      <time datetime="{{ post.date }}">{{ post.date | date(format='%Y-%m-%d') }}</time>
+      <a href="{{ post.permalink }}">{{ post.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
 {% endblock %}
