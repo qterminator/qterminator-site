@@ -25,7 +25,6 @@ templates/
   section.html           blog index
   page.html              individual post
 sass/style.scss          compiled to /style.css
-.domains                 codeberg pages custom domain config
 .woodpecker.yml          CI: build + push to `pages` branch
 ```
 
@@ -45,19 +44,17 @@ tags = ["release"]
 Body in markdown.
 ```
 
-## Deploy to Codeberg Pages
+## Deploy (GitHub Pages)
 
-1. Push this repo to `codeberg.org/qterminator/qterminator-site`.
-2. Generate an SSH deploy key: `ssh-keygen -t ed25519 -f deploy_key -N ""`.
-3. Add `deploy_key.pub` as a deploy key with write access on the target repo
-   (Settings → Deploy Keys, check "Enable Write Access").
-4. Enable Woodpecker on the repo at <https://ci.codeberg.org>, add the
-   private key as a secret named `deploy_key`.
-5. Push to `main`. The pipeline builds with Zola and force-pushes
-   `public/` to the `pages` branch.
-6. DNS: CNAME `www.qterminator.org` → `qterminator.codeberg.page.`, and either
-   ALIAS the apex or A-record it to Codeberg's Pages IPs (see Codeberg
-   Pages docs for current addresses).
+Hosted on GitHub Pages via GitHub Actions. Every push to `main` runs
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which builds the
+site with Zola 0.22.1 and publishes it to the `github-pages` environment.
+There is no `pages` branch to maintain.
+
+The custom domain (`qterminator.org`) is set in the repository's **Settings -> Pages**.
+DNS: point the apex `qterminator.org` at GitHub Pages (A/AAAA records) and set
+`www.qterminator.org` as a CNAME to `qterminator.github.io`. Enable *Enforce HTTPS* once the
+certificate is provisioned.
 
 ## License
 

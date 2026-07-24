@@ -15,5 +15,5 @@ taxonomies = [
 smart_punctuation = true
 
 [extra]
-repo_url = "https://codeberg.org/qterminator/qterminator"
+repo_url = "https://github.com/qterminator/qdterm"
 author = "qterminator"
